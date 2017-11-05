@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SuperInfoController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <TabPane prefHeight="527.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Felvétel">
+               <content>
+                  <GridPane prefHeight="460.0" prefWidth="606.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="143.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="457.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label prefHeight="17.0" prefWidth="149.0" text="DEKLARACIJA br.">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label prefHeight="17.0" prefWidth="196.0" text="Ime i prezime" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Adresa stanovanja" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Br. licne karte" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Mesto idavanja" GridPane.rowIndex="4">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="SuperInfo borj" GridPane.rowIndex="5">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Kategorija" GridPane.rowIndex="6">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Tekst oglasa" GridPane.rowIndex="7">
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <TextArea fx:id="text" minHeight="-Infinity" prefHeight="50.0" prefWidth="600.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
+                                 <GridPane.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </GridPane.margin>
+                              </TextArea>
+                              <TextField fx:id="dekBr" GridPane.columnIndex="1" />
+                              <TextField fx:id="imePreziem" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="address" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="brLicne" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="mestoIzdavanje" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="superInfoBr" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <ComboBox fx:id="kategorija" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                           </children>
+                        </GridPane>
+                        <Button mnemonicParsing="false" onAction="#butClick" text="Mentés" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Button>
+                     </children>
+                  </GridPane>
+               </content>
+          </Tab>
+          <Tab text="Listáz">
+               <content>
+                  <TableView prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="Demo1" />
+                      <TableColumn prefWidth="75.0" text="Demo2" />
+                    </columns>
+                  </TableView>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</GridPane>
