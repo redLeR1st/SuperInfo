@@ -72,11 +72,5 @@ public class SuperInfoController {
     public void initialize() {
         kategorija.setValue("Razno");
         kategorija.setItems(kategorijaList);
-
-        try {
-            cnt.saveToDocxFile(null, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

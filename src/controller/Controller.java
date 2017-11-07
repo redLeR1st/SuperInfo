@@ -1,36 +1,14 @@
 package controller;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
-
-/*
-import java.util.List;
-import java.util.Map;
-
-import org.docx4j.Docx4J;
-import org.docx4j.dml.wordprocessingDrawing.Inline;
-import org.docx4j.jaxb.Context;
-import org.docx4j.model.table.TblFactory;
-import org.docx4j.openpackaging.packages.ProtectDocument;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.docx4j.wml.CTOdsoFieldMapData;
-import org.docx4j.wml.CTTblPrBase;
-import org.docx4j.wml.Drawing;
-import org.docx4j.wml.JcEnumeration;
-import org.docx4j.wml.ObjectFactory;
-import org.docx4j.wml.P;
-import org.docx4j.wml.R;
-import org.docx4j.wml.RPr;
-import org.docx4j.wml.STDocProtect;
-import org.docx4j.wml.STVerticalJc;
-import org.docx4j.wml.Tbl;
-import org.docx4j.wml.TblPr;
-import org.docx4j.wml.Tc;
-import org.docx4j.wml.Text;
-import org.docx4j.wml.Tr;
-*/
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import modell.bean.Add;
 import modell.bean.Cust;
@@ -60,15 +38,15 @@ public class Controller {
             run.addBreak();
             run.addBreak();
             run.addBreak();
-            run.setText("                                                   DEKLARACIJA br." + "10");
+            run.setText("                                                   DEKLARACIJA br." + add.getDeklarationNo());
             run.addBreak();
-            run.setText("Podaci oglasivača: " + "Barta Bence");
+            run.setText("Podaci oglasivača: " + cust.getName());
             run.addBreak();
-            run.setText("Adresa stanovanja: " + "Csuka Zoltán 11. Zenta");
+            run.setText("Adresa stanovanja: " + cust.getAddress());
             run.addBreak();
-            run.setText("Br.lične karte: " + "004516441" + "     mesto izdavanja: " + "Senta");
+            run.setText("Br.lične karte: " + cust.getLicnaNo() + "     mesto izdavanja: " + add.getMestoIzdavanja());
             run.addBreak();
-            run.setText("Superinfo broj: " + "21" + "     Kategorija" + "Razno");
+            run.setText("Superinfo broj: " + add.getSuperInfoBroja() + "     Kategorija" + add.getKategory());
             run.addBreak();
             run.setText("Tekst oglasa:");//run.addBreak();
 
@@ -85,7 +63,7 @@ public class Controller {
             row0.setHeight(2000);
             XWPFTableCell cell0 = row0.getCell(0);
             // ***
-            cell0.setText("SZÖóóóVEG");
+            cell0.setText(add.getText());
 
 
             XWPFParagraph paragraph2 = document.createParagraph();
@@ -105,97 +83,34 @@ public class Controller {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-
-
-
-
-
-
-/*
-        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
-        MainDocumentPart mdp = wordMLPackage.getMainDocumentPart();
-
-        mdp.addParagraphOfText("SU-INFO MEDIA DOO TANČIČ MIHAJ 2.   SENTA  PIB:104 566 007   Tel.:024/815-411\n\n");
-        mdp.addParagraphOfText(".                DEKLARACIJA br." + "10");
-        mdp.addParagraphOfText("Podaci oglasivača: " + "Barta Bence");
-        mdp.addParagraphOfText("Adresa stanovanja: " + "Csuka Zoltán 11. Zenta");
-        mdp.addParagraphOfText("Br.lične karte: " + "004516441" + "     mesto izdavanja: " + "Senta");
-        mdp.addParagraphOfText("Superinfo broj:" + "21" + "     Kategorija" + "Razno");
-        mdp.addParagraphOfText("Tekst oglasa");
-        mdp.addParagraphOfText("");
-
-        /*Tbl table = n
-        mdp.addObject(table);*/
-
-
-
-
-        // To make a document Read-Only
-        /*ProtectDocument protection = new ProtectDocument(wordMLPackage);
-        protection.restrictEditing(STDocProtect.READ_ONLY, "foobaa");*/
-
-
-
-
-/*
-        String filename = System.getProperty("user.dir") + "\\protect.docx";
-        Docx4J.save(wordMLPackage, new java.io.File(filename), Docx4J.FLAG_SAVE_ZIP_FILE);
-*/
-        // To save encrypted, you'd use FLAG_SAVE_ENCRYPTED_AGILE, for example:
-        // Docx4J.save(wordMLPackage, new java.io.File(filename), Docx4J.FLAG_SAVE_ENCRYPTED_AGILE, "foo");
-
-
-  //      System.out.println("Saved " + filename);
-
-    }
-    /*private Tbl getSampleTable(WordprocessingMLPackage wPMLpackage) {
-
-        ObjectFactory factory = Context.getWmlObjectFactory();
-        int writableWidthTwips = wPMLpackage.getDocumentModel().getSections()
-                .get(0).getPageDimensions()
-                .getWritableWidthTwips();
-        List<Map<String, String>> data = getSampleTableData();
-        TableDefinition tableDef = getSampleTableDef();
-        int cols = tableDef.getColumns().size();
-        int cellWidthTwips = new Double(
-                Math.floor((writableWidthTwips / cols))
-        ).intValue();
-
-        Tbl table = TblFactory.createTable((data.size() + 1), cols, cellWidthTwips);
-
-        Tr headerRow = (Tr) table.getContent().get(0);
-
-        int f = 0;
-        for (CTOdsoFieldMapData.Column column : tableDef.getColumns()) {
-            Tc column = (Tc) headerRow.getContent().get(f);
-            P columnPara = (P) column.getContent().get(0);
-            f++;
-            Text text = factory.createText();
-            text.setValue(column.getName());
-            R run = factory.createR();
-            run.getContent().add(text);
-            columnPara.getContent().add(run);
-        }
-        int i = 1;
-
-        for (Map<String, String> entry : data) {
-            Tr row = (Tr) table.getContent().get(i);
-            i++;
-            int d = 0;
-            for (String key : entry.keySet()) {
-                Tc column = (Tc) row.getContent().get(d);
-                P columnPara = (P) column.getContent().get(0);
-                d++;
-                Text tx = factory.createText();
-                R run = factory.createR();
-                tx.setValue(entry.get(key));
-                run.getContent().add(tx);
-                columnPara.getContent().add(run);
+        } finally {
+            try {
+                saveToFile(add.getText(), add.getKategory());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        return table;
-    }*/
+    }
+
+    private void saveToFile(String text, String kategory) throws IOException {
+        File yourFile = new File("test.txt");
+        yourFile.createNewFile(); // if file already exists will do nothing
+        //FileOutputStream oFile = new FileOutputStream(yourFile, false);
+
+
+
+        Path path = Paths.get("test.txt");
+        Charset charset = StandardCharsets.UTF_8;
+
+        String content = new String(Files.readAllBytes(path), charset);
+        if(content.contains(kategory)) {
+            content = content.replaceAll(kategory + "\r\n", kategory + "\r\n" + text + "\r\n");
+            Files.write(path, content.getBytes(charset));
+        } else {
+            content += kategory + "\r\n" + text + "\r\n";
+            Files.write(path, content.getBytes(charset));
+        }
+    }
+
 
 }
