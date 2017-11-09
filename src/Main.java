@@ -1,6 +1,3 @@
-import javafx.application.Application;
-import javafx.stage.Stage;
-import view.MainPage;
 import view.MainScene;
 
 public class Main {

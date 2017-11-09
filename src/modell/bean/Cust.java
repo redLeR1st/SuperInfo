@@ -2,17 +2,14 @@ package modell.bean;
 
 public class Cust {
 
-    private int licnaNo;
+    private String licnaNo;
     private String name;
     private String address;
     private String ulica;
     private String houseNo;
     private String town;
 
-    public Cust() {
-    }
-
-    public Cust(int licnaNo, String name, String address) {
+    public Cust(String licnaNo, String name, String address) {
         this.licnaNo = licnaNo;
         this.name = name;
         this.address = address;
@@ -21,11 +18,11 @@ public class Cust {
 //        this.town = town;
     }
 
-    public int getLicnaNo() {
+    public String getLicnaNo() {
         return licnaNo;
     }
 
-    public void setLicnaNo(int licnaNo) {
+    public void setLicnaNo(String licnaNo) {
         this.licnaNo = licnaNo;
     }
 

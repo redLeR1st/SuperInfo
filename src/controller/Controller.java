@@ -26,7 +26,9 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 public class Controller {
 
 
-    public void saveToDocxFile(Add add, Cust cust) {
+    public boolean saveToDocxFile(Add add, Cust cust) {
+
+        boolean rvS = false;
 
         XWPFDocument document = new XWPFDocument();
 
@@ -46,7 +48,7 @@ public class Controller {
             run.addBreak();
             run.setText("Br.lične karte: " + cust.getLicnaNo() + "     mesto izdavanja: " + add.getMestoIzdavanja());
             run.addBreak();
-            run.setText("Superinfo broj: " + add.getSuperInfoBroja() + "     Kategorija" + add.getKategory());
+            run.setText("Superinfo broj: " + add.getSuperInfoBroja() + "     Kategorija: " + add.getKategory());
             run.addBreak();
             run.setText("Tekst oglasa:");//run.addBreak();
 
@@ -77,7 +79,7 @@ public class Controller {
 
 
         try {
-            FileOutputStream output = new FileOutputStream("Awesome.docx");
+            FileOutputStream output = new FileOutputStream("deklaracija.docx");
             document.write(output);
             output.close();
 
@@ -85,23 +87,36 @@ public class Controller {
             e.printStackTrace();
         } finally {
             try {
-                saveToFile(add.getText(), add.getKategory());
+                for(int temp : add.getSuperInfoBroja()) {
+                    if(saveToFile(add.getText(), add.getKategory(), temp)) {
+                        rvS = true;
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        return rvS;
     }
 
-    private void saveToFile(String text, String kategory) throws IOException {
-        File yourFile = new File("test.txt");
+    private boolean saveToFile(String text, String kategory, int superInfoBroja) throws IOException {
+
+        boolean rvS = true;
+
+        File yourFile = new File("SuperInfo" + superInfoBroja + ".txt");
         yourFile.createNewFile(); // if file already exists will do nothing
         //FileOutputStream oFile = new FileOutputStream(yourFile, false);
 
-
-
-        Path path = Paths.get("test.txt");
-        Charset charset = StandardCharsets.UTF_8;
-
+        Path path = null;
+        Charset charset = null;
+        try {
+            path = Paths.get("SuperInfo" + superInfoBroja + ".txt");
+            charset = StandardCharsets.UTF_8;
+        } catch (Exception e) {
+            e.printStackTrace();
+            rvS = false;
+        }
         String content = new String(Files.readAllBytes(path), charset);
         if(content.contains(kategory)) {
             content = content.replaceAll(kategory + "\r\n", kategory + "\r\n" + text + "\r\n");
@@ -110,6 +125,10 @@ public class Controller {
             content += kategory + "\r\n" + text + "\r\n";
             Files.write(path, content.getBytes(charset));
         }
+
+
+
+        return rvS;
     }
 
 
