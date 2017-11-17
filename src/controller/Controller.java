@@ -13,18 +13,19 @@ import java.nio.file.Paths;
 import modell.bean.Add;
 import modell.bean.Cust;
 
-import  org.apache.poi.xwpf.usermodel.XWPFDocument;
-import  org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import  org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 
 public class Controller {
 
+
+    private boolean firstRun = true;
 
     public boolean saveToDocxFile(Add add, Cust cust) {
 
@@ -75,6 +76,17 @@ public class Controller {
             run.addBreak();
             run.setText("________________________                                                               ________________________");
             run.addBreak();
+
+            if (firstRun) {
+                run.addBreak();
+                run.addBreak();
+                run.addBreak();
+                run.addBreak();
+                run.addBreak();
+                run.addBreak();
+
+                firstRun = false;
+            }
         }
 
 
@@ -82,18 +94,23 @@ public class Controller {
             FileOutputStream output = new FileOutputStream("deklaracija.docx");
             document.write(output);
             output.close();
+            rvS = true;
 
         } catch (Exception e) {
             e.printStackTrace();
+            rvS = false;
         } finally {
-            try {
-                for(int temp : add.getSuperInfoBroja()) {
-                    if(saveToFile(add.getText(), add.getKategory(), temp)) {
-                        rvS = true;
+            if (rvS) {
+                try {
+                    for (int temp : add.getSuperInfoBroja()) {
+                        if (saveToFile(add.getText(), add.getKategory(), temp)) {
+                            rvS = true;
+                        }
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    rvS = false;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
 
