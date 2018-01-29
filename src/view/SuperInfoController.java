@@ -8,11 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.impl.CTPImpl;
 
 import controller.Controller;
 import javafx.collections.FXCollections;
@@ -38,14 +37,17 @@ public class SuperInfoController {
     @FXML private TextField superInfoBr;
     @FXML private ComboBox kategorija;
     @FXML private TextArea text;
-    @FXML private Label label;
+    @FXML private Label labelCena;
     @FXML private CheckBox checkBox;
     @FXML private TextField drugaKategorija;
+
+    @FXML private Label labelFolder;
+    @FXML private TextField folder;
 
     Controller cnt = new Controller();
 
     ObservableList<String> kategorijaList = FXCollections.observableArrayList("Nekretnina", "Voćnjak, Oranica",
-            "Izadje se", "Letovanje", "Usluga", "Vozilo", "Posao", "Társkereső", "Razno", "Otkup");
+            "Izdaje se", "Letovanje", "Usluga", "Vozilo", "Posao", "Társkereső", "Razno", "Otkup");
 
     public void print() {
         if (butClick()) {
@@ -69,7 +71,8 @@ public class SuperInfoController {
               "".equals(mestoIzdavanje.getText()) ||
               "".equals(superInfoBr.getText()) ||
               "".equals(kategorija.getValue().toString()) ||
-              "".equals(text.getText())
+              "".equals(text.getText()) ||
+              "".equals(folder.getText())
         )){
 
             try {
@@ -84,6 +87,14 @@ public class SuperInfoController {
                 Integer.parseInt(brLicne.getText());
             } catch (Exception e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Hiba: számot kell megadni: broj licne karte", ButtonType.OK);
+                alert.showAndWait();
+                return false;
+            }
+
+            try {
+                Integer.parseInt(folder.getText());
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Hiba: számot kell megadni: Beállítások\\Mappa", ButtonType.OK);
                 alert.showAndWait();
                 return false;
             }
@@ -132,7 +143,7 @@ public class SuperInfoController {
                 return false;
             }
 
-            Add add = new Add(Integer.parseInt(dekBr.getText()), text.getText(), kat, mestoIzdavanje.getText(), superInfoBrList);
+            Add add = new Add(Integer.parseInt(dekBr.getText()), text.getText(), kat, mestoIzdavanje.getText(), superInfoBrList, folder.getText());
             Cust cust = new Cust(brLicne.getText(), imePreziem.getText(), address.getText());
 
             System.out.println(cust.toString());
@@ -140,8 +151,29 @@ public class SuperInfoController {
 
             try {
                 if(cnt.saveToDocxFile(add, cust)) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "A mentés sikeres!", ButtonType.OK);
-                    alert.showAndWait();
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Sikeres mentés!");
+                    alert.setHeaderText("A mentés sikeres volt! Szeretné törölni a bevitt adatokat?");
+                    alert.setContentText("Igen: A deklaráció szám kivételével törlődnek a szövegmezőbe bevitt értékek!\n" +
+                                         "Nem: A bevitt értékek bentmaradnak a programban!");
+
+
+                    ButtonType buttonTypeOne = new ButtonType("Igen");
+                    ButtonType buttonTypeTwo = new ButtonType("Nem");
+
+                    alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == buttonTypeOne){
+                        imePreziem.setText("");
+                        address.setText("");
+                        brLicne.setText("");
+                        mestoIzdavanje.setText("");
+                        superInfoBr.setText("");
+                        text.setText("");
+                        drugaKategorija.setText("");
+                        checkBox.setSelected(false);
+                    }
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Hiba: a mentés/nyomtatás sikertelen! Lehet, hogy nem zárta be a Word-öt", ButtonType.OK);
                     alert.showAndWait();
@@ -172,7 +204,11 @@ public class SuperInfoController {
             }
         }
 
-        label.setText("" + cena);
+        labelCena.setText("" + cena);
+    }
+
+    public void changeFolder() {
+        labelFolder.setText("Mappa: " + folder.getText());
     }
 
     @FXML
@@ -184,8 +220,35 @@ public class SuperInfoController {
             countCena();
         });
 
+        folder.textProperty().addListener((observable, oldValue, newValue) -> {
+            changeFolder();
+        });
+
         if (readPrevDekBroj() != null) {
             dekBr.setText(readPrevDekBroj());
+        }
+
+        File[] directories = new File(".").listFiles(File::isDirectory);
+
+        int max = -999;
+        boolean weGotaNumber = false;
+
+        for (File tempFile: directories
+             ) {
+            int temp = 0;
+            try {
+                temp = Integer.parseInt(tempFile.getName());
+                weGotaNumber = true;
+            } catch (Exception e) {
+                System.out.println("Nem szám!");
+            }
+
+            if (temp > max) {
+                max = temp;
+            }
+        }
+        if (weGotaNumber) {
+            folder.setText("" + max);
         }
     }
 

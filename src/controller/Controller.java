@@ -89,6 +89,7 @@ public class Controller {
             }
         }
 
+        firstRun = true;
 
         try {
             FileOutputStream output = new FileOutputStream("deklaracija.docx");
@@ -103,7 +104,7 @@ public class Controller {
             if (rvS) {
                 try {
                     for (int temp : add.getSuperInfoBroja()) {
-                        if (saveToFile(add.getText(), add.getKategory(), temp)) {
+                        if (saveToFile(add.getText(), add.getKategory(), temp, add.getFolder())) {
                             rvS = true;
                         }
                     }
@@ -117,18 +118,21 @@ public class Controller {
         return rvS;
     }
 
-    private boolean saveToFile(String text, String kategory, int superInfoBroja) throws IOException {
+    private boolean saveToFile(String text, String kategory, int superInfoBroja, String folder) throws IOException {
 
         boolean rvS = true;
 
-        File yourFile = new File("SuperInfo" + superInfoBroja + ".txt");
+        String filePath = folder + File.separator + "SuperInfo" + superInfoBroja + ".txt";
+
+        File yourFile = new File(filePath);
+        yourFile.getParentFile().mkdirs();
         yourFile.createNewFile(); // if file already exists will do nothing
         //FileOutputStream oFile = new FileOutputStream(yourFile, false);
 
         Path path = null;
         Charset charset = null;
         try {
-            path = Paths.get("SuperInfo" + superInfoBroja + ".txt");
+            path = Paths.get(filePath);
             charset = StandardCharsets.UTF_8;
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,10 +140,10 @@ public class Controller {
         }
         String content = new String(Files.readAllBytes(path), charset);
         if(content.contains(kategory)) {
-            content = content.replaceAll(kategory + "\r\n", kategory + "\r\n" + text + "\r\n");
+            content = content.replaceAll("\r\n" + kategory + "----------------------" + "\r\n", "\r\n" + kategory + "----------------------" + "\r\n" + text + "\r\n");
             Files.write(path, content.getBytes(charset));
         } else {
-            content += kategory + "\r\n" + text + "\r\n";
+            content += "\r\n" + kategory + "----------------------" + "\r\n" + text + "\r\n";
             Files.write(path, content.getBytes(charset));
         }
 

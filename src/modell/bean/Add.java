@@ -11,6 +11,8 @@ public class Add {
     private String mestoIzdavanja;
     private List<Integer> superInfoBroja;
 
+    private String folder;
+
     public Add() {
         superInfoBroja = new ArrayList<Integer>(){
             @Override
@@ -20,12 +22,13 @@ public class Add {
         };
     }
 
-    public Add(int deklarationNo, String text, String kategory, String mestoIzdavanja, List<Integer> superInfoBroja) {
+    public Add(int deklarationNo, String text, String kategory, String mestoIzdavanja, List<Integer> superInfoBroja, String folder) {
         this.deklarationNo = deklarationNo;
         this.text = text;
         this.kategory = kategory;
         this.mestoIzdavanja = mestoIzdavanja;
         this.superInfoBroja = superInfoBroja;
+        this.folder = folder;
     }
 
     public int getDeklarationNo() {
@@ -68,6 +71,14 @@ public class Add {
         this.superInfoBroja = superInfoBroja;
     }
 
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
     @Override
     public String toString() {
         return "Add{" +
@@ -76,6 +87,7 @@ public class Add {
                 ", kategory='" + kategory + '\'' +
                 ", mestoIzdavanja='" + mestoIzdavanja + '\'' +
                 ", superInfoBroja=" + superInfoBroja +
+                ", folder= " + folder +
                 '}';
     }
 }
