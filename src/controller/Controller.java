@@ -139,8 +139,12 @@ public class Controller {
             rvS = false;
         }
         String content = new String(Files.readAllBytes(path), charset);
-        if(content.contains(kategory)) {
+
+        if (content.contains(kategory + "----------------------")) {
             content = content.replaceAll("\r\n" + kategory + "----------------------" + "\r\n", "\r\n" + kategory + "----------------------" + "\r\n" + text + "\r\n");
+            Files.write(path, content.getBytes(charset));
+        } else if(content.contains(kategory)) {
+            content = content.replaceAll("\r\n" + kategory, "\r\n\r\n" + kategory + "----------------------" + "\r\n" + text /*+ "\r\n"*/);
             Files.write(path, content.getBytes(charset));
         } else {
             content += "\r\n" + kategory + "----------------------" + "\r\n" + text + "\r\n";
